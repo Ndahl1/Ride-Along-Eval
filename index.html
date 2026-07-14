@@ -4,286 +4,552 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#16243d">
-<title>Ride-Along Coaching Recap — Template</title>
+<title>Ride-Along Coaching Recap — Leslie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <style>
   :root{
-    --navy:#16243d; --navy-2:#1f3354; --ink:#1c2940; --paper:#f4f6f9; --card:#ffffff;
-    --line:#dfe4ec; --muted:#6b7891; --accent:#c8472e;
-    --s1:#d8453a; --s2:#e07b3e; --s3:#e0b53e; --s4:#7fae51; --s5:#3f9d57; --na:#9aa5b8;
+    --navy:#16243d;
+    --navy-2:#22375c;
+    --paper:#f4f5f7;
+    --card:#ffffff;
+    --ink:#1c2431;
+    --muted:#5c6675;
+    --line:#dde2e9;
+    --amber:#e8842c;
+    --amber-soft:#fdf1e4;
+    --good:#2e7d4f;
+    --good-soft:#e7f3ec;
+    --warn:#b98413;
+    --warn-soft:#fbf3df;
+    --low:#c0452f;
+    --low-soft:#faeae6;
+    --radius:12px;
     --shadow:0 1px 2px rgba(22,36,61,.06),0 4px 14px rgba(22,36,61,.06);
   }
   *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
   body{
-    font-family:Georgia,"Times New Roman",serif;
-    background:var(--paper); color:var(--ink); line-height:1.55; font-size:16px;
+    margin:0;background:var(--paper);color:var(--ink);
+    font:16px/1.5 "Public Sans",system-ui,-apple-system,sans-serif;
   }
-  .ui{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-  .page{max-width:820px;margin:0 auto;background:var(--card);box-shadow:var(--shadow)}
+  h1,h2,h3,summary{font-family:"Archivo",system-ui,sans-serif}
 
-  /* Header band */
-  .band{background:var(--navy);color:#fff;padding:26px 40px 22px;position:relative}
-  .band::after{content:"";position:absolute;left:0;right:0;bottom:0;height:4px;background:var(--accent)}
-  .confidential{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#aab8d4;margin:0 0 10px}
-  .band h1{margin:0;font-size:30px;font-weight:700;letter-spacing:.2px;line-height:1.15}
-  .band .sub{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:13px;color:#c3cee4;margin-top:8px;letter-spacing:.03em}
+  /* ---------- Masthead ---------- */
+  .masthead{background:var(--navy);color:#fff;padding:20px 16px 22px}
+  .masthead .inner{max-width:780px;margin:0 auto}
+  .eyebrow{font:600 11px/1.3 "Archivo",sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#a9b6cd;margin:0 0 6px}
+  .masthead h1{margin:0;font-size:clamp(22px,5vw,30px);font-weight:800;letter-spacing:-.01em}
+  .masthead p.sub{margin:6px 0 0;font-size:13px;color:#c4cede}
+  .savebar{display:flex;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+  .savebar .status{font-size:12px;color:#9fb2d1}
+  .savebar .status.dirty{color:#f3c98b}
 
-  /* Meta grid */
-  .meta{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line)}
-  .meta .cell{padding:14px 40px;border-bottom:1px solid var(--line)}
-  .meta .cell:nth-child(odd){border-right:1px solid var(--line)}
-  .meta .cell:nth-last-child(-n+2){border-bottom:none}
-  .meta .k{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
-  .meta .v{font-size:17px;font-weight:700}
+  main{max-width:780px;margin:0 auto;padding:16px 12px 60px}
+  section.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);margin:14px 0;overflow:hidden}
+  .card-pad{padding:16px}
+  h2.sect{margin:0 0 4px;font-size:17px;font-weight:700}
+  p.hint{margin:0 0 12px;font-size:13px;color:var(--muted)}
 
-  main{padding:8px 40px 36px}
-  h2{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--navy);margin:34px 0 12px;padding-bottom:7px;border-bottom:2px solid var(--navy)}
-
-  /* Editable fields */
-  [contenteditable]{outline:none;border-radius:4px;transition:box-shadow .12s}
-  [contenteditable]:focus{box-shadow:0 0 0 2px rgba(200,71,46,.35);background:#fffdf8}
-  [contenteditable][data-ph]:empty::before{content:attr(data-ph);color:#a9b3c6;font-weight:400;font-style:italic}
-
-  /* Score table */
-  table.scores{width:100%;border-collapse:collapse;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
-  table.scores th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
-  table.scores td{padding:10px;border-bottom:1px solid var(--line);font-size:15px;vertical-align:middle}
-  table.scores .stepnum{width:34px;font-weight:800;color:var(--muted)}
-  table.scores .stepname b{font-weight:700}
-  table.scores .stepname .tag{color:var(--muted);font-size:14px}
-  td.score{width:130px;text-align:right;white-space:nowrap}
-  .chip{display:inline-block;min-width:86px;text-align:center;padding:4px 10px;border-radius:6px;color:#fff;font-weight:800;font-size:14px;background:var(--na)}
-  .chip[contenteditable]:focus{box-shadow:0 0 0 2px rgba(22,36,61,.4)}
-  .chip[data-ph]:empty::before{color:rgba(255,255,255,.85)}
-  .c1{background:var(--s1)} .c2{background:var(--s2)} .c3{background:var(--s3)} .c4{background:var(--s4)} .c5{background:var(--s5)} .cna{background:var(--na)}
-  tr.overall td{border-bottom:none;border-top:2px solid var(--navy);padding-top:12px}
-  tr.overall .stepname{font-weight:800;font-size:15px;letter-spacing:.02em}
-  tr.overall .stepname [contenteditable]{font-weight:800}
-
-  /* Note + lists */
-  .note{background:#f7f9fc;border-left:4px solid var(--navy);padding:16px 20px;margin-top:4px;font-size:16px}
-  ul.plain{margin:6px 0 0;padding-left:22px}
-  ul.plain li{margin-bottom:9px}
-  ol.priorities{margin:6px 0 0;padding-left:0;list-style:none;counter-reset:pri}
-  ol.priorities li{counter-increment:pri;position:relative;padding:0 0 0 46px;margin-bottom:14px}
-  ol.priorities li::before{
-    content:counter(pri);position:absolute;left:0;top:1px;width:30px;height:30px;border-radius:50%;
-    background:var(--accent);color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    font-weight:800;font-size:15px;display:flex;align-items:center;justify-content:center
+  /* ---------- Header fields ---------- */
+  .fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .field{display:flex;flex-direction:column;gap:4px}
+  .field.wide{grid-column:1/-1}
+  .field label{font:600 11px/1.2 "Archivo",sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .field input,.field select,textarea{
+    font:inherit;color:var(--ink);background:#fff;border:1px solid var(--line);
+    border-radius:8px;padding:10px 12px;min-height:44px;width:100%;
   }
-
-  /* Step detail */
-  .step{margin-bottom:18px}
-  .step h3{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:16px;margin:0 0 5px;display:flex;align-items:center;gap:9px}
-  .step h3 .chip{min-width:52px;font-size:13px;padding:3px 8px}
-  .step p{margin:0}
-
-  .closing{margin-top:8px}
-  .sig{margin-top:26px;padding-top:18px;border-top:1px solid var(--line)}
-  .sig .name{font-weight:800;font-size:17px}
-  .sig .role,.sig .contact{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:13px;color:var(--muted)}
-  footer{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:11px;color:var(--muted);letter-spacing:.06em;text-align:center;padding:14px 40px 26px}
-
-  /* Toolbar */
-  .toolbar{position:fixed;right:18px;bottom:18px;z-index:50;display:flex;gap:10px;align-items:center}
-  .toolbar button{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    border:none;border-radius:10px;padding:12px 18px;font-size:15px;font-weight:700;cursor:pointer;
-    box-shadow:0 6px 18px rgba(22,36,61,.3)
+  .field input:focus,.field select:focus,textarea:focus,button:focus-visible{
+    outline:2px solid var(--amber);outline-offset:1px;border-color:var(--amber);
   }
-  .toolbar .print{background:var(--navy);color:#fff}
-  .toolbar .reset{background:#fff;color:var(--navy);border:1px solid var(--line)}
-  .toolbar button:active{transform:translateY(1px)}
-  .toolbar button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
-  .saved{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:12px;font-weight:700;color:var(--s5);background:#fff;border-radius:8px;padding:6px 10px;box-shadow:0 4px 12px rgba(22,36,61,.15);opacity:0;transition:opacity .25s}
-  .saved.show{opacity:1}
+  textarea{resize:vertical;line-height:1.5}
 
-  @media (max-width:640px){
-    .band,.meta .cell,main,footer{padding-left:18px;padding-right:18px}
-    .band h1{font-size:24px}
-    .meta{grid-template-columns:1fr}
-    .meta .cell:nth-child(odd){border-right:none}
-    .meta .cell:nth-last-child(-n+2){border-bottom:1px solid var(--line)}
-    .meta .cell:last-child{border-bottom:none}
+  /* ---------- Overall scoreboard ---------- */
+  .scoreboard{display:flex;align-items:center;gap:16px;padding:14px 16px;background:var(--navy);color:#fff;border-radius:var(--radius);margin:14px 0}
+  .scoreboard .big{font:800 34px/1 "Archivo",sans-serif;min-width:96px}
+  .scoreboard .big small{font-size:16px;font-weight:600;color:#a9b6cd}
+  .scoreboard .meta{font-size:13px;color:#c4cede}
+  .meter{flex:1;height:8px;border-radius:4px;background:#2c4066;overflow:hidden;min-width:80px}
+  .meter i{display:block;height:100%;width:0;background:var(--amber);border-radius:4px;transition:width .25s ease}
+
+  /* ---------- Step cards ---------- */
+  details.step{border-top:1px solid var(--line)}
+  details.step:first-of-type{border-top:none}
+  details.step summary{
+    list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;
+    padding:14px 16px;font-size:15px;font-weight:700;user-select:none;
   }
+  details.step summary::-webkit-details-marker{display:none}
+  .stepnum{
+    flex:none;width:30px;height:30px;border-radius:8px;background:var(--navy);color:#fff;
+    display:grid;place-items:center;font:700 14px "Archivo",sans-serif;
+  }
+  .steptitle{flex:1;min-width:0}
+  .steptitle small{display:block;font-family:"Public Sans",sans-serif;font-weight:400;font-size:12px;color:var(--muted)}
+  .badge{
+    flex:none;font:700 13px "Archivo",sans-serif;border-radius:999px;padding:5px 12px;
+    background:#eef1f5;color:var(--muted);min-width:44px;text-align:center;
+  }
+  .badge.s12{background:var(--low-soft);color:var(--low)}
+  .badge.s3{background:var(--warn-soft);color:var(--warn)}
+  .badge.s45{background:var(--good-soft);color:var(--good)}
+  .badge.sna{background:#eef1f5;color:var(--muted)}
+  .chev{flex:none;transition:transform .2s;color:var(--muted)}
+  details[open] .chev{transform:rotate(180deg)}
+  .stepbody{padding:0 16px 16px}
+
+  .scale{display:flex;gap:6px;margin:2px 0 14px;flex-wrap:wrap}
+  .scale button{
+    flex:1 1 0;min-width:44px;min-height:44px;border:1px solid var(--line);background:#fff;
+    border-radius:9px;font:700 15px "Archivo",sans-serif;color:var(--ink);cursor:pointer;
+  }
+  .scale button.na{flex:0 0 auto;padding:0 14px;font-size:13px;color:var(--muted)}
+  .scale button[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+  .scale button.na[aria-pressed="true"]{background:#5c6675;border-color:#5c6675}
+  .scalelabels{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin:-10px 0 12px}
+
+  ul.behaviors{list-style:none;margin:0;padding:0}
+  ul.behaviors li{border-top:1px dashed var(--line)}
+  ul.behaviors li:first-child{border-top:none}
+  ul.behaviors label{display:flex;gap:10px;align-items:flex-start;padding:10px 2px;cursor:pointer;font-size:14.5px}
+  ul.behaviors input{width:20px;height:20px;margin-top:1px;accent-color:var(--good);flex:none}
+
+  .noteToggle{background:none;border:none;color:var(--navy);font:600 13px "Public Sans",sans-serif;padding:8px 0;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+  .stepnote{margin-top:6px}
+  .stepnote textarea{min-height:70px}
+
+  /* ---------- Chips ---------- */
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 4px}
+  .chip{
+    border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;
+    font:500 13px "Public Sans",sans-serif;color:var(--ink);cursor:pointer;max-width:100%;
+    text-align:left;
+  }
+  .chip:hover{border-color:var(--amber);background:var(--amber-soft)}
+  .chip .tag{font-weight:700;color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-right:6px}
+  .chips-empty{font-size:13px;color:var(--muted);font-style:italic;margin:6px 0}
+
+  .strengthRow{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+  .strengthRow input{flex:1}
+  .strengthRow .clear{flex:none;border:none;background:none;color:var(--muted);font-size:18px;cursor:pointer;min-width:34px;min-height:34px}
+
+  .prio{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px;background:#fbfcfd}
+  .prio h3{margin:0 0 8px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
+  .prio input{margin-bottom:8px;font-weight:600}
+  .prio textarea{min-height:60px}
+
+  /* ---------- Manager note ---------- */
+  #managerNote{min-height:120px}
+  .dictate{font-size:12.5px;color:var(--muted);margin-top:8px}
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    font:700 14px "Archivo",sans-serif;border-radius:9px;padding:12px 18px;cursor:pointer;
+    border:1px solid transparent;min-height:44px;
+  }
+  .btn-amber{background:var(--amber);color:#fff}
+  .btn-ghost{background:transparent;color:#fff;border-color:#43587f}
+  .btn-outline{background:#fff;color:var(--navy);border-color:var(--line)}
+  .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+
+  /* ---------- Footer ---------- */
+  footer.sig{max-width:780px;margin:0 auto;padding:8px 16px 40px;color:var(--muted);font-size:13px}
+  footer.sig strong{color:var(--ink)}
+
+  /* ---------- Print ---------- */
   @media print{
-    body{background:#fff}
-    .page{box-shadow:none;max-width:none}
-    .toolbar{display:none}
-    .band,.chip,.note,ol.priorities li::before,h2{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-    .step,.note,tr{break-inside:avoid}
-    [contenteditable][data-ph]:empty::before{content:""}
+    body{background:#fff;font-size:12.5px}
+    .masthead{background:#fff!important;color:var(--navy);padding:0 0 8px;border-bottom:3px solid var(--navy)}
+    .masthead p.sub,.eyebrow{color:#4a5a75}
+    .savebar,.scale,.scalelabels,.chips,.chips-empty,.noteToggle,.actions,.dictate,
+    .strengthRow .clear,.chip,button.btn{display:none!important}
+    section.card{border:none;box-shadow:none;margin:10px 0;break-inside:avoid}
+    .card-pad{padding:6px 0}
+    .scoreboard{background:#fff;color:var(--navy);border:2px solid var(--navy);border-radius:8px}
+    .scoreboard .meta{color:#4a5a75}
+    .meter{background:#e2e7ef}
+    details.step{border-top:1px solid var(--line)}
+    details.step summary{padding:8px 0;pointer-events:none}
+    .chev{display:none}
+    .stepbody{padding:0 0 8px 42px}
+    ul.behaviors li.print-hide{display:none}
+    ul.behaviors label{padding:3px 0;cursor:default}
+    ul.behaviors input{width:14px;height:14px}
+    .stepnote textarea,.prio textarea,#managerNote,.field input,.field select{
+      border:none;padding:2px 0;min-height:0;background:#fff;
+    }
+    .stepnote.print-hide,.field.print-dim{display:block}
+    a{color:inherit;text-decoration:none}
   }
 </style>
 </head>
 <body>
-<div class="page">
 
-  <header class="band">
-    <p class="confidential">Leslie Heating, Cooling, Plumbing &amp; Electric &nbsp;·&nbsp; Confidential Coaching Record</p>
+<header class="masthead">
+  <div class="inner">
+    <p class="eyebrow">Leslie Heating, Cooling, Plumbing &amp; Electric · Confidential Coaching Record</p>
     <h1>Ride-Along Coaching Recap</h1>
-    <p class="sub">Comfort Consultant Performance &nbsp;·&nbsp; Nexstar HVAC Sales — Curbside Evaluation</p>
-  </header>
+    <p class="sub">Comfort Consultant Performance · Nexstar HVAC Sales — Curbside Evaluation</p>
+    <div class="savebar">
+      <button class="btn btn-amber" onclick="window.print()">Print / Save PDF</button>
+      <button class="btn btn-ghost" id="newBtn" type="button">New recap</button>
+      <span class="status" id="saveStatus">Autosave on</span>
+    </div>
+  </div>
+</header>
 
-  <section class="meta ui">
-    <div class="cell"><div class="k">Consultant</div><div class="v" contenteditable data-save="consultant" data-ph="Consultant name"></div></div>
-    <div class="cell"><div class="k">Date</div><div class="v" contenteditable data-save="date" data-ph="Month DD, YYYY"></div></div>
-    <div class="cell"><div class="k">Customer / Job</div><div class="v" contenteditable data-save="job" data-ph="Customer (#Job)"></div></div>
-    <div class="cell"><div class="k">Evaluator</div><div class="v" contenteditable data-save="evaluator" data-ph="Evaluator name"></div></div>
-    <div class="cell"><div class="k">Outcome</div><div class="v" contenteditable data-save="outcome" data-ph="Sold / In progress / Pending / Declined"></div></div>
-    <div class="cell"><div class="k">Quote</div><div class="v" contenteditable data-save="quote" data-ph="$0,000"></div></div>
+<main>
+
+  <!-- Call details -->
+  <section class="card"><div class="card-pad">
+    <h2 class="sect">Call details</h2>
+    <p class="hint">Everything here is a tap or two — date defaults to today.</p>
+    <div class="fields">
+      <div class="field">
+        <label for="consultant">Consultant</label>
+        <input id="consultant" list="roster" placeholder="Choose or type…" autocomplete="off">
+        <datalist id="roster"></datalist>
+      </div>
+      <div class="field">
+        <label for="date">Date</label>
+        <input id="date" type="date">
+      </div>
+      <div class="field wide">
+        <label for="job">Customer / Job</label>
+        <input id="job" placeholder="Name, address, or job #">
+      </div>
+      <div class="field">
+        <label for="evaluator">Evaluator</label>
+        <input id="evaluator" list="evaluators" autocomplete="off">
+        <datalist id="evaluators"></datalist>
+      </div>
+      <div class="field">
+        <label for="outcome">Outcome</label>
+        <select id="outcome">
+          <option value="">—</option>
+          <option>Sold</option>
+          <option>No sale</option>
+          <option>Follow-up pending</option>
+          <option>Customer rescheduled</option>
+          <option>Turnover to another consultant</option>
+        </select>
+      </div>
+      <div class="field wide">
+        <label for="quote">Quote</label>
+        <input id="quote" inputmode="decimal" placeholder="$">
+      </div>
+    </div>
+  </div></section>
+
+  <!-- Overall -->
+  <div class="scoreboard" aria-live="polite">
+    <div class="big" id="overallBig">—<small> / 5</small></div>
+    <div style="flex:1">
+      <div class="meter"><i id="meterFill"></i></div>
+      <div class="meta" id="overallMeta">No steps scored yet</div>
+    </div>
+  </div>
+
+  <!-- Steps -->
+  <section class="card" id="stepsCard">
+    <div class="card-pad" style="padding-bottom:6px">
+      <h2 class="sect">Sales call steps</h2>
+      <p class="hint">Tap a score, check the behaviors you observed. Unchecked items on low-scoring steps feed your coaching priorities below.</p>
+    </div>
+    <div id="steps"></div>
   </section>
 
-  <main>
-    <h2>Evaluation summary</h2>
-    <table class="scores">
-      <thead>
-        <tr><th>Step</th><th>Sales call step</th><th style="text-align:right">Score</th></tr>
-      </thead>
-      <tbody>
-        <tr><td class="stepnum">1</td><td class="stepname"><b>Prepare</b> <span class="tag">— Craft your perfect day</span></td><td class="score"><span class="chip" contenteditable data-save="s1" data-score="prepare" data-ph="— / 5"></span></td></tr>
-        <tr><td class="stepnum">2</td><td class="stepname"><b>Greet</b> <span class="tag">— Make your time valuable</span></td><td class="score"><span class="chip" contenteditable data-save="s2" data-score="greet" data-ph="— / 5"></span></td></tr>
-        <tr><td class="stepnum">3</td><td class="stepname"><b>Explore</b> <span class="tag">— Uncover their situation</span></td><td class="score"><span class="chip" contenteditable data-save="s3" data-score="explore" data-ph="— / 5"></span></td></tr>
-        <tr><td class="stepnum">4</td><td class="stepname"><b>Present</b> <span class="tag">— Create customer-centered choices</span></td><td class="score"><span class="chip" contenteditable data-save="s4" data-score="present" data-ph="— / 5"></span></td></tr>
-        <tr><td class="stepnum">5</td><td class="stepname"><b>Close</b> <span class="tag">— Facilitate an agreeable conclusion</span></td><td class="score"><span class="chip" contenteditable data-save="s5" data-score="close" data-ph="— / 5"></span></td></tr>
-        <tr><td class="stepnum">6</td><td class="stepname"><b>Follow Up</b> <span class="tag">— Ensure a 5-star experience</span></td><td class="score"><span class="chip" contenteditable data-save="s6" data-score="followup" data-ph="— / 5"></span></td></tr>
-        <tr class="overall"><td class="stepnum"></td><td class="stepname">OVERALL&nbsp; (<span contenteditable data-save="items" data-ph="00">​</span> items scored)</td><td class="score"><span class="chip" contenteditable data-save="s0" data-score="overall" data-ph="— / 5"></span></td></tr>
-      </tbody>
-    </table>
+  <!-- Strengths -->
+  <section class="card"><div class="card-pad">
+    <h2 class="sect">What you did well</h2>
+    <p class="hint">Tap a suggestion to add it, or type your own.</p>
+    <div id="strengthRows"></div>
+    <div class="chips" id="strengthChips"></div>
+    <p class="chips-empty" id="strengthEmpty">Check off observed behaviors above and suggestions will appear here.</p>
+  </div></section>
 
-    <h2>Manager&rsquo;s note</h2>
-    <div class="note" contenteditable data-save="note" data-ph="Open with genuine appreciation — what you saw them do well, the effort you noticed, and why the ride-along mattered."></div>
+  <!-- Priorities -->
+  <section class="card"><div class="card-pad">
+    <h2 class="sect">Your three priorities</h2>
+    <p class="hint">Suggestions come from unchecked behaviors on steps scored 3 or below. Tap to fill the next open priority, then add the why and the fix.</p>
+    <div class="chips" id="prioChips"></div>
+    <p class="chips-empty" id="prioEmpty">Score the steps above and coaching suggestions will appear here.</p>
+    <div id="prios"></div>
+  </div></section>
 
-    <h2>What you did well</h2>
-    <ul class="plain" contenteditable data-save="strengths">
-      <li></li>
-      <li></li>
-      <li></li>
-    </ul>
+  <!-- Manager's note -->
+  <section class="card"><div class="card-pad">
+    <h2 class="sect">Manager’s note</h2>
+    <p class="hint">The personal word that makes this recap land. One honest paragraph beats three generic ones.</p>
+    <textarea id="managerNote" placeholder="What I want you to take away from today’s ride-along…"></textarea>
+    <p class="dictate">Tip: on your phone, tap the microphone on the keyboard and dictate this in the truck while it’s fresh.</p>
+  </div></section>
 
-    <h2>Your three priorities</h2>
-    <ol class="priorities" contenteditable data-save="priorities">
-      <li><b>Priority one.</b> Why it matters and the concrete fix.</li>
-      <li><b>Priority two.</b> Why it matters and the concrete fix.</li>
-      <li><b>Priority three.</b> Why it matters and the concrete fix.</li>
-    </ol>
+</main>
 
-    <h2>Step-by-step detail</h2>
-
-    <div class="step">
-      <h3><span class="chip" data-mirror="greet">—</span> Greet</h3>
-      <p contenteditable data-save="d_greet" data-ph="What landed, what was missed, and the next-level move."></p>
-    </div>
-
-    <div class="step">
-      <h3><span class="chip" data-mirror="explore">—</span> Explore</h3>
-      <p contenteditable data-save="d_explore" data-ph="What landed, what was missed, and the next-level move."></p>
-    </div>
-
-    <div class="step">
-      <h3><span class="chip" data-mirror="present">—</span> Present</h3>
-      <p contenteditable data-save="d_present" data-ph="What landed, what was missed, and the next-level move."></p>
-    </div>
-
-    <div class="step">
-      <h3><span class="chip" data-mirror="close">—</span> Close</h3>
-      <p contenteditable data-save="d_close" data-ph="What landed, what was missed, and the next-level move."></p>
-    </div>
-
-    <div class="step">
-      <h3><span class="chip" data-mirror="followup">—</span> Follow Up</h3>
-      <p contenteditable data-save="d_followup" data-ph="What landed, what was missed, and the next-level move."></p>
-    </div>
-
-    <h2>Closing</h2>
-    <p class="closing" contenteditable data-save="closing" data-ph="End on belief — acknowledge the effort, point at the foundation, and name what the adjustments will do."></p>
-
-    <div class="sig">
-      <div class="name" contenteditable data-save="sig_name">Nels M. Dahl</div>
-      <div class="role">Sales Manager<br>Leslie Heating, Cooling, Plumbing &amp; Electric, Inc.</div>
-      <div class="contact" style="margin-top:6px">nelsd@leslierepair.com &nbsp;·&nbsp; 224.651.0851 &nbsp;·&nbsp; LeslieRepair.com</div>
-    </div>
-  </main>
-
-  <footer>Prepared by Nels M. Dahl, Sales Manager</footer>
-</div>
-
-<div class="toolbar">
-  <span class="saved ui" id="saved">Saved ✓</span>
-  <button class="reset ui" onclick="resetForm()">New recap</button>
-  <button class="print ui" onclick="window.print()">Print / Save PDF</button>
-</div>
+<footer class="sig">
+  <strong>Nels M. Dahl</strong><br>
+  Sales Manager<br>
+  Leslie Heating, Cooling, Plumbing &amp; Electric, Inc.<br>
+  nelsd@leslierepair.com · 224.651.0851 · LeslieRepair.com
+</footer>
 
 <script>
-(function(){
-  var KEY='leslie_ridealong_recap_v1';
-  var savedBadge=document.getElementById('saved');
-  var saveTimer, badgeTimer;
+/* =====================================================
+   EDIT ME — roster, evaluators, and behavior checklists
+   ===================================================== */
+const ROSTER = [
+  "Add consultant names here", // e.g. "Mike R.", "Sarah T."
+];
+const EVALUATORS = ["Nels M. Dahl"];
 
-  function colorClass(v){
-    var t=(v||'').trim().toLowerCase();
-    if(!t||t==='—'||t==='-'||t==='na'||t==='n/a') return 'cna';
-    var n=parseFloat(t);
-    if(isNaN(n)) return 'cna';
-    if(n<2) return 'c1';
-    if(n<3) return 'c2';
-    if(n<3.6) return 'c3';
-    if(n<4.5) return 'c4';
-    return 'c5';
-  }
-  function applyChip(el, raw){
-    el.classList.remove('c1','c2','c3','c4','c5','cna');
-    el.classList.add(colorClass(raw));
-  }
-  function mirrorScores(){
-    document.querySelectorAll('[data-score]').forEach(function(src){
-      var name=src.getAttribute('data-score');
-      var raw=src.textContent.trim();
-      applyChip(src, raw);
-      document.querySelectorAll('[data-mirror="'+name+'"]').forEach(function(m){
-        var n=parseFloat(raw);
-        m.textContent = raw ? (isNaN(n)? raw : n.toFixed(1)) : '—';
-        applyChip(m, raw);
+const STEPS = [
+  { key:"prepare", n:1, name:"Prepare", tag:"Craft your perfect day", behaviors:[
+    "Reviewed customer / job history before arrival",
+    "Confirmed appointment and arrival window with the customer",
+    "Truck, tools, tablet, and paperwork ready",
+    "Knew current equipment options, pricing, and promotions",
+    "Set a clear personal goal for the call",
+  ]},
+  { key:"greet", n:2, name:"Greet", tag:"Make your time valuable", behaviors:[
+    "On time; parked and approached professionally",
+    "Clean uniform, shoe covers, name-first introduction",
+    "Built early rapport with a genuine personal connection",
+    "Set an agenda for the visit and got the customer’s agreement",
+    "Identified all decision-makers up front",
+  ]},
+  { key:"explore", n:3, name:"Explore", tag:"Uncover their situation", behaviors:[
+    "Asked open-ended questions about comfort, air quality, and bills",
+    "Listened more than talked; took notes",
+    "Toured the whole home, not just the equipment",
+    "Uncovered the customer’s hot buttons and repeated them back",
+    "Asked about timeline and budget expectations",
+  ]},
+  { key:"present", n:4, name:"Present", tag:"Create customer-centered choices", behaviors:[
+    "Tied every option back to the customer’s stated hot buttons",
+    "Presented good / better / best choices",
+    "Sold value and outcomes, not just price",
+    "Presented financing on every option",
+    "Checked in for understanding before moving on",
+  ]},
+  { key:"close", n:5, name:"Close", tag:"Facilitate an agreeable conclusion", behaviors:[
+    "Asked for the business clearly and confidently",
+    "Stayed comfortable with silence after asking",
+    "Handled objections with questions, not pressure",
+    "Isolated the real objection before responding",
+    "Agreed on a concrete next step before leaving",
+  ]},
+  { key:"followup", n:6, name:"Follow Up", tag:"Ensure a 5-star experience", behaviors:[
+    "Set clear expectations for install / next steps",
+    "Scheduled the follow-up before leaving the driveway",
+    "Asked for the review and the referral",
+    "Thanked the customer by name",
+    "Logged call notes in the system same-day",
+  ]},
+];
+/* ===================================================== */
+
+const $ = s => document.querySelector(s);
+const state = {
+  header:{consultant:"",date:"",job:"",evaluator:EVALUATORS[0]||"",outcome:"",quote:""},
+  steps:{},        // key -> {score:null|0..5 (0 = N/A), checked:[bool], note:""}
+  strengths:["","",""],
+  prios:[{t:"",d:""},{t:"",d:""},{t:"",d:""}],
+  note:"",
+};
+STEPS.forEach(s => state.steps[s.key] = {score:null, checked:s.behaviors.map(()=>false), note:""});
+
+/* ---------- safe storage (works on GitHub Pages; silently skipped where unavailable) ---------- */
+const KEY = "rideAlongRecap.v2";
+function loadSaved(){ try{ const raw = localStorage.getItem(KEY); if(raw){ const d = JSON.parse(raw); deepMerge(state,d); } }catch(e){} }
+let saveTimer = null;
+function save(){
+  $("#saveStatus").textContent = "Saving…"; $("#saveStatus").classList.add("dirty");
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(()=>{
+    try{ localStorage.setItem(KEY, JSON.stringify(state)); $("#saveStatus").textContent = "Saved ✓"; }
+    catch(e){ $("#saveStatus").textContent = "Autosave unavailable here"; }
+    $("#saveStatus").classList.remove("dirty");
+  }, 400);
+}
+function deepMerge(t,s){ for(const k in s){ if(s[k] && typeof s[k]==="object" && !Array.isArray(s[k])) deepMerge(t[k]=t[k]||{},s[k]); else t[k]=s[k]; } }
+
+/* ---------- build UI ---------- */
+function fillDatalist(id, arr){ $(id).innerHTML = arr.map(n=>`<option value="${esc(n)}">`).join(""); }
+function esc(s){ return String(s).replace(/[&<>"']/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+function buildSteps(){
+  $("#steps").innerHTML = STEPS.map(s=>`
+    <details class="step" data-step="${s.key}">
+      <summary>
+        <span class="stepnum">${s.n}</span>
+        <span class="steptitle">${s.name}<small>${esc(s.tag)}</small></span>
+        <span class="badge sna" id="badge-${s.key}">—</span>
+        <svg class="chev" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 6l5 5 5-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </summary>
+      <div class="stepbody">
+        <div class="scale" role="group" aria-label="${s.name} score">
+          ${[1,2,3,4,5].map(v=>`<button type="button" data-score="${v}" aria-pressed="false">${v}</button>`).join("")}
+          <button type="button" class="na" data-score="0" aria-pressed="false">N/A</button>
+        </div>
+        <div class="scalelabels"><span>Needs work</span><span>Nailed it</span></div>
+        <ul class="behaviors">
+          ${s.behaviors.map((b,i)=>`<li><label><input type="checkbox" data-b="${i}"> <span>${esc(b)}</span></label></li>`).join("")}
+        </ul>
+        <button type="button" class="noteToggle">+ add a note for this step</button>
+        <div class="stepnote" hidden><textarea placeholder="Specific moment, quote, or coaching detail…"></textarea></div>
+      </div>
+    </details>`).join("");
+
+  document.querySelectorAll("details.step").forEach(el=>{
+    const key = el.dataset.step, st = state.steps[key];
+    el.querySelectorAll(".scale button").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const v = +btn.dataset.score;
+        st.score = (st.score===v) ? null : v;
+        refreshStep(key); refreshOverall(); refreshPrioChips(); save();
       });
     });
-  }
-  function save(){
-    var data={};
-    document.querySelectorAll('[data-save]').forEach(function(el){
-      data[el.getAttribute('data-save')]=el.innerHTML;
-    });
-    try{ localStorage.setItem(KEY, JSON.stringify(data)); }catch(e){}
-    savedBadge.classList.add('show');
-    clearTimeout(badgeTimer);
-    badgeTimer=setTimeout(function(){savedBadge.classList.remove('show');},1200);
-  }
-  function load(){
-    var raw;
-    try{ raw=localStorage.getItem(KEY); }catch(e){}
-    if(!raw) return;
-    try{
-      var data=JSON.parse(raw);
-      document.querySelectorAll('[data-save]').forEach(function(el){
-        var k=el.getAttribute('data-save');
-        if(data[k]!==undefined) el.innerHTML=data[k];
+    el.querySelectorAll("ul.behaviors input").forEach(cb=>{
+      cb.addEventListener("change", ()=>{
+        st.checked[+cb.dataset.b] = cb.checked;
+        cb.closest("li").classList.toggle("print-hide", !cb.checked);
+        refreshStrengthChips(); refreshPrioChips(); save();
       });
-    }catch(e){}
-  }
-  window.resetForm=function(){
-    if(!confirm('Start a new recap? This clears everything on this form.')) return;
-    try{ localStorage.removeItem(KEY); }catch(e){}
-    location.reload();
-  };
-  document.addEventListener('input', function(e){
-    if(e.target.closest('[data-save]')){
-      clearTimeout(saveTimer);
-      saveTimer=setTimeout(save, 400);
-      if(e.target.closest('[data-score]')) mirrorScores();
+    });
+    const tgl = el.querySelector(".noteToggle"), noteWrap = el.querySelector(".stepnote"), ta = noteWrap.querySelector("textarea");
+    tgl.addEventListener("click", ()=>{ noteWrap.hidden = false; tgl.style.display="none"; ta.focus(); });
+    ta.addEventListener("input", ()=>{ st.note = ta.value; noteWrap.classList.toggle("print-hide", !ta.value.trim()); save(); });
+  });
+}
+
+function refreshStep(key){
+  const el = document.querySelector(`details[data-step="${key}"]`), st = state.steps[key];
+  el.querySelectorAll(".scale button").forEach(b=> b.setAttribute("aria-pressed", String(+b.dataset.score===st.score)));
+  const badge = $("#badge-"+key);
+  if(st.score===null){ badge.textContent="—"; badge.className="badge sna"; }
+  else if(st.score===0){ badge.textContent="N/A"; badge.className="badge sna"; }
+  else { badge.textContent = st.score+"/5"; badge.className = "badge " + (st.score<=2?"s12":st.score===3?"s3":"s45"); }
+}
+
+function refreshOverall(){
+  const scored = STEPS.map(s=>state.steps[s.key].score).filter(v=>v!==null && v!==0);
+  if(!scored.length){ $("#overallBig").innerHTML = "—<small> / 5</small>"; $("#overallMeta").textContent = "No steps scored yet"; $("#meterFill").style.width = "0"; return; }
+  const avg = scored.reduce((a,b)=>a+b,0)/scored.length;
+  $("#overallBig").innerHTML = avg.toFixed(1)+"<small> / 5</small>";
+  $("#overallMeta").textContent = `Overall · ${scored.length} of ${STEPS.length} steps scored`;
+  $("#meterFill").style.width = (avg/5*100)+"%";
+}
+
+/* ---------- strengths ---------- */
+function buildStrengths(){
+  $("#strengthRows").innerHTML = state.strengths.map((v,i)=>`
+    <div class="strengthRow">
+      <input data-i="${i}" placeholder="Strength ${i+1}" value="${esc(v)}">
+      <button type="button" class="clear" data-i="${i}" aria-label="Clear strength ${i+1}">×</button>
+    </div>`).join("");
+  document.querySelectorAll("#strengthRows input").forEach(inp=>
+    inp.addEventListener("input", ()=>{ state.strengths[+inp.dataset.i]=inp.value; save(); }));
+  document.querySelectorAll("#strengthRows .clear").forEach(b=>
+    b.addEventListener("click", ()=>{ state.strengths[+b.dataset.i]=""; buildStrengths(); refreshStrengthChips(); save(); }));
+}
+function refreshStrengthChips(){
+  const seen = new Set(state.strengths.map(s=>s.trim()));
+  const chips = [];
+  STEPS.forEach(s=> state.steps[s.key].checked.forEach((c,i)=>{
+    if(c && !seen.has(s.behaviors[i])) chips.push({step:s.name, text:s.behaviors[i]});
+  }));
+  $("#strengthChips").innerHTML = chips.map(c=>
+    `<button type="button" class="chip" data-text="${esc(c.text)}"><span class="tag">${c.step}</span>${esc(c.text)}</button>`).join("");
+  $("#strengthEmpty").style.display = chips.length ? "none" : "";
+  document.querySelectorAll("#strengthChips .chip").forEach(ch=>
+    ch.addEventListener("click", ()=>{
+      const slot = state.strengths.findIndex(v=>!v.trim());
+      const i = slot===-1 ? state.strengths.push("")-1 : slot;
+      state.strengths[i] = ch.dataset.text;
+      buildStrengths(); refreshStrengthChips(); save();
+    }));
+}
+
+/* ---------- priorities ---------- */
+const PRIO_LABELS = ["Priority one","Priority two","Priority three"];
+function buildPrios(){
+  $("#prios").innerHTML = state.prios.map((p,i)=>`
+    <div class="prio">
+      <h3>${PRIO_LABELS[i]}</h3>
+      <input data-i="${i}" data-f="t" placeholder="What to work on" value="${esc(p.t)}">
+      <textarea data-i="${i}" data-f="d" placeholder="Why it matters and the concrete fix…">${esc(p.d)}</textarea>
+    </div>`).join("");
+  document.querySelectorAll("#prios input, #prios textarea").forEach(el=>
+    el.addEventListener("input", ()=>{ state.prios[+el.dataset.i][el.dataset.f]=el.value; save(); }));
+}
+function refreshPrioChips(){
+  const taken = new Set(state.prios.map(p=>p.t.trim()));
+  const chips = [];
+  STEPS.forEach(s=>{
+    const st = state.steps[s.key];
+    if(st.score!==null && st.score>=1 && st.score<=3){
+      st.checked.forEach((c,i)=>{ if(!c && !taken.has(s.behaviors[i])) chips.push({step:s.name, text:s.behaviors[i]}); });
     }
   });
-  load();
-  mirrorScores();
-})();
+  $("#prioChips").innerHTML = chips.map(c=>
+    `<button type="button" class="chip" data-text="${esc(c.text)}"><span class="tag">${c.step}</span>${esc(c.text)}</button>`).join("");
+  $("#prioEmpty").style.display = chips.length ? "none" : "";
+  document.querySelectorAll("#prioChips .chip").forEach(ch=>
+    ch.addEventListener("click", ()=>{
+      const slot = state.prios.findIndex(p=>!p.t.trim());
+      if(slot!==-1){ state.prios[slot].t = ch.dataset.text; buildPrios(); refreshPrioChips(); save(); }
+    }));
+}
+
+/* ---------- header ---------- */
+function wireHeader(){
+  const map = {consultant:"consultant",date:"date",job:"job",evaluator:"evaluator",outcome:"outcome",quote:"quote"};
+  for(const k in map){
+    const el = document.getElementById(map[k]);
+    el.value = state.header[k] || "";
+    el.addEventListener("input", ()=>{ state.header[k]=el.value; save(); });
+  }
+  if(!state.header.date){ const d=new Date(); $("#date").value = state.header.date = d.toISOString().slice(0,10); }
+  if(!$("#evaluator").value && EVALUATORS[0]){ $("#evaluator").value = state.header.evaluator = EVALUATORS[0]; }
+}
+
+/* ---------- restore + new ---------- */
+function restoreUI(){
+  wireHeader();
+  STEPS.forEach(s=>{
+    const st = state.steps[s.key], el = document.querySelector(`details[data-step="${s.key}"]`);
+    refreshStep(s.key);
+    el.querySelectorAll("ul.behaviors input").forEach(cb=>{
+      cb.checked = !!st.checked[+cb.dataset.b];
+      cb.closest("li").classList.toggle("print-hide", !cb.checked);
+    });
+    const noteWrap = el.querySelector(".stepnote"), ta = noteWrap.querySelector("textarea");
+    ta.value = st.note || "";
+    noteWrap.classList.toggle("print-hide", !ta.value.trim());
+    if(st.note){ noteWrap.hidden=false; el.querySelector(".noteToggle").style.display="none"; }
+  });
+  $("#managerNote").value = state.note || "";
+  refreshOverall(); refreshStrengthChips(); refreshPrioChips();
+}
+
+document.addEventListener("DOMContentLoaded", ()=>{
+  fillDatalist("#roster", ROSTER);
+  fillDatalist("#evaluators", EVALUATORS);
+  buildSteps(); buildStrengths(); buildPrios();
+  loadSaved();
+  restoreUI();
+  $("#managerNote").addEventListener("input", e=>{ state.note=e.target.value; save(); });
+  $("#newBtn").addEventListener("click", ()=>{
+    if(!confirm("Start a new recap? This clears the current one.")) return;
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    location.reload();
+  });
+  document.querySelectorAll("details.step").forEach((d,i)=>{ if(i===0) d.open = true; });
+});
+window.addEventListener("beforeprint", ()=> document.querySelectorAll("details.step").forEach(d=>d.open=true));
 </script>
 </body>
 </html>
