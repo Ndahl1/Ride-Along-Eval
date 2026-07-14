@@ -131,14 +131,16 @@
   .chip .tag{font-weight:700;color:var(--muted);font-size:11px;letter-spacing:.06em;text-transform:uppercase;margin-right:6px}
   .chips-empty{font-size:13px;color:var(--muted);font-style:italic;margin:6px 0}
 
-  .strengthRow{display:flex;gap:8px;align-items:center;margin-bottom:8px}
-  .strengthRow input{flex:1}
-  .strengthRow .clear{flex:none;border:none;background:none;color:var(--muted);font-size:18px;cursor:pointer;min-width:34px;min-height:34px}
-
-  .prio{border:1px solid var(--line);border-radius:10px;padding:12px;margin-bottom:12px;background:#fbfcfd}
-  .prio h3{margin:0 0 8px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
-  .prio input{margin-bottom:8px;font-weight:600}
-  .prio textarea{min-height:60px}
+  /* ---------- Appointment summary ---------- */
+  .sumScore{display:flex;align-items:center;gap:12px;background:var(--navy);color:#fff;border-radius:10px;padding:12px 16px;margin:0 0 12px}
+  .sumScore .num{font:800 28px/1 "Archivo",sans-serif;white-space:nowrap}
+  .sumScore .num small{font-size:15px;font-weight:600;color:#a9b6cd}
+  .sumScore .lbl{font-size:13px;color:#c4cede}
+  #summaryText{min-height:110px}
+  .opp{border:1px solid var(--amber);border-radius:10px;padding:12px;margin-top:12px;background:var(--amber-soft)}
+  .opp h3{margin:0 0 8px;font-size:13px;letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
+  .opp input{margin-bottom:8px;font-weight:600}
+  .opp textarea{min-height:60px}
 
   /* ---------- Manager note ---------- */
   #managerNote{min-height:120px}
@@ -164,7 +166,10 @@
     .masthead{background:#fff!important;color:var(--navy);padding:0 0 8px;border-bottom:3px solid var(--navy)}
     .masthead p.sub,.eyebrow{color:#4a5a75}
     .savebar,.scale,.scalelabels,.chips,.chips-empty,.noteToggle,.actions,.dictate,
-    .strengthRow .clear,.chip,button.btn{display:none!important}
+    .chip,button.btn{display:none!important}
+    .sumScore{background:#fff;color:var(--navy);border:2px solid var(--navy)}
+    .sumScore .num small,.sumScore .lbl{color:#4a5a75}
+    .opp{background:#fff;border:2px solid var(--amber)}
     section.card{border:none;box-shadow:none;margin:10px 0;break-inside:avoid}
     .card-pad{padding:6px 0}
     .scoreboard{background:#fff;color:var(--navy);border:2px solid var(--navy);border-radius:8px}
@@ -177,7 +182,7 @@
     ul.behaviors li.print-hide{display:none}
     ul.behaviors label{padding:3px 0;cursor:default}
     ul.behaviors input{width:14px;height:14px}
-    .stepnote textarea,.prio textarea,#managerNote,.field input,.field select{
+    .stepnote textarea,.opp textarea,.opp input,#summaryText,#managerNote,.field input,.field select{
       border:none;padding:2px 0;min-height:0;background:#fff;
     }
     .stepnote.print-hide,.field.print-dim{display:block}
@@ -256,27 +261,28 @@
   <section class="card" id="stepsCard">
     <div class="card-pad" style="padding-bottom:6px">
       <h2 class="sect">Sales call steps</h2>
-      <p class="hint">Tap a score, check the behaviors you observed. Unchecked items on low-scoring steps feed your coaching priorities below.</p>
+      <p class="hint">Tap a score, check the behaviors you observed. Unchecked items on low-scoring steps feed the biggest-opportunity suggestions below.</p>
     </div>
     <div id="steps"></div>
   </section>
 
-  <!-- Strengths -->
+  <!-- Appointment summary -->
   <section class="card"><div class="card-pad">
-    <h2 class="sect">What you did well</h2>
-    <p class="hint">Tap a suggestion to add it, or type your own.</p>
-    <div id="strengthRows"></div>
-    <div class="chips" id="strengthChips"></div>
-    <p class="chips-empty" id="strengthEmpty">Check off observed behaviors above and suggestions will appear here.</p>
-  </div></section>
-
-  <!-- Priorities -->
-  <section class="card"><div class="card-pad">
-    <h2 class="sect">Your three priorities</h2>
-    <p class="hint">Suggestions come from unchecked behaviors on steps scored 3 or below. Tap to fill the next open priority, then add the why and the fix.</p>
-    <div class="chips" id="prioChips"></div>
-    <p class="chips-empty" id="prioEmpty">Score the steps above and coaching suggestions will appear here.</p>
-    <div id="prios"></div>
+    <h2 class="sect">Appointment summary</h2>
+    <p class="hint">One picture of the whole call: the process score, how it went, and the single biggest opportunity.</p>
+    <div class="sumScore" aria-live="polite">
+      <div class="num" id="sumScoreNum">—<small> / 5</small></div>
+      <div class="lbl" id="sumScoreLbl">Process score · no steps scored yet</div>
+    </div>
+    <textarea id="summaryText" placeholder="The whole appointment in one honest paragraph — how the process flowed, what the customer experienced, and where it turned…"></textarea>
+    <div class="opp">
+      <h3>Biggest opportunity</h3>
+      <p class="hint">Suggestions come from unchecked behaviors on steps scored 3 or below. Tap one to fill it, or type your own.</p>
+      <div class="chips" id="oppChips"></div>
+      <p class="chips-empty" id="oppEmpty">Score the steps above and suggestions will appear here.</p>
+      <input id="oppTitle" placeholder="The one thing that moves the needle most">
+      <textarea id="oppDetail" placeholder="Why it matters and the concrete fix…"></textarea>
+    </div>
   </div></section>
 
   <!-- Manager's note -->
@@ -355,14 +361,13 @@ const $ = s => document.querySelector(s);
 const state = {
   header:{consultant:"",date:"",job:"",evaluator:EVALUATORS[0]||"",outcome:"",quote:""},
   steps:{},        // key -> {score:null|0..5 (0 = N/A), checked:[bool], note:""}
-  strengths:["","",""],
-  prios:[{t:"",d:""},{t:"",d:""},{t:"",d:""}],
+  summary:{text:"", oppT:"", oppD:""},
   note:"",
 };
 STEPS.forEach(s => state.steps[s.key] = {score:null, checked:s.behaviors.map(()=>false), note:""});
 
 /* ---------- safe storage (works on GitHub Pages; silently skipped where unavailable) ---------- */
-const KEY = "rideAlongRecap.v2";
+const KEY = "rideAlongRecap.v3";
 function loadSaved(){ try{ const raw = localStorage.getItem(KEY); if(raw){ const d = JSON.parse(raw); deepMerge(state,d); } }catch(e){} }
 let saveTimer = null;
 function save(){
@@ -409,14 +414,14 @@ function buildSteps(){
       btn.addEventListener("click", ()=>{
         const v = +btn.dataset.score;
         st.score = (st.score===v) ? null : v;
-        refreshStep(key); refreshOverall(); refreshPrioChips(); save();
+        refreshStep(key); refreshOverall(); refreshOppChips(); save();
       });
     });
     el.querySelectorAll("ul.behaviors input").forEach(cb=>{
       cb.addEventListener("change", ()=>{
         st.checked[+cb.dataset.b] = cb.checked;
         cb.closest("li").classList.toggle("print-hide", !cb.checked);
-        refreshStrengthChips(); refreshPrioChips(); save();
+        refreshOppChips(); save();
       });
     });
     const tgl = el.querySelector(".noteToggle"), noteWrap = el.querySelector(".stepnote"), ta = noteWrap.querySelector("textarea");
@@ -436,71 +441,43 @@ function refreshStep(key){
 
 function refreshOverall(){
   const scored = STEPS.map(s=>state.steps[s.key].score).filter(v=>v!==null && v!==0);
-  if(!scored.length){ $("#overallBig").innerHTML = "—<small> / 5</small>"; $("#overallMeta").textContent = "No steps scored yet"; $("#meterFill").style.width = "0"; return; }
+  if(!scored.length){
+    $("#overallBig").innerHTML = "—<small> / 5</small>"; $("#overallMeta").textContent = "No steps scored yet"; $("#meterFill").style.width = "0";
+    $("#sumScoreNum").innerHTML = "—<small> / 5</small>"; $("#sumScoreLbl").textContent = "Process score · no steps scored yet";
+    return;
+  }
   const avg = scored.reduce((a,b)=>a+b,0)/scored.length;
   $("#overallBig").innerHTML = avg.toFixed(1)+"<small> / 5</small>";
   $("#overallMeta").textContent = `Overall · ${scored.length} of ${STEPS.length} steps scored`;
   $("#meterFill").style.width = (avg/5*100)+"%";
+  $("#sumScoreNum").innerHTML = avg.toFixed(1)+"<small> / 5</small>";
+  $("#sumScoreLbl").textContent = `Process score · ${scored.length} of ${STEPS.length} steps scored`;
 }
 
-/* ---------- strengths ---------- */
-function buildStrengths(){
-  $("#strengthRows").innerHTML = state.strengths.map((v,i)=>`
-    <div class="strengthRow">
-      <input data-i="${i}" placeholder="Strength ${i+1}" value="${esc(v)}">
-      <button type="button" class="clear" data-i="${i}" aria-label="Clear strength ${i+1}">×</button>
-    </div>`).join("");
-  document.querySelectorAll("#strengthRows input").forEach(inp=>
-    inp.addEventListener("input", ()=>{ state.strengths[+inp.dataset.i]=inp.value; save(); }));
-  document.querySelectorAll("#strengthRows .clear").forEach(b=>
-    b.addEventListener("click", ()=>{ state.strengths[+b.dataset.i]=""; buildStrengths(); refreshStrengthChips(); save(); }));
+/* ---------- appointment summary ---------- */
+function wireSummary(){
+  $("#summaryText").addEventListener("input", e=>{ state.summary.text = e.target.value; save(); });
+  $("#oppTitle").addEventListener("input", e=>{ state.summary.oppT = e.target.value; refreshOppChips(); save(); });
+  $("#oppDetail").addEventListener("input", e=>{ state.summary.oppD = e.target.value; save(); });
 }
-function refreshStrengthChips(){
-  const seen = new Set(state.strengths.map(s=>s.trim()));
-  const chips = [];
-  STEPS.forEach(s=> state.steps[s.key].checked.forEach((c,i)=>{
-    if(c && !seen.has(s.behaviors[i])) chips.push({step:s.name, text:s.behaviors[i]});
-  }));
-  $("#strengthChips").innerHTML = chips.map(c=>
-    `<button type="button" class="chip" data-text="${esc(c.text)}"><span class="tag">${c.step}</span>${esc(c.text)}</button>`).join("");
-  $("#strengthEmpty").style.display = chips.length ? "none" : "";
-  document.querySelectorAll("#strengthChips .chip").forEach(ch=>
-    ch.addEventListener("click", ()=>{
-      const slot = state.strengths.findIndex(v=>!v.trim());
-      const i = slot===-1 ? state.strengths.push("")-1 : slot;
-      state.strengths[i] = ch.dataset.text;
-      buildStrengths(); refreshStrengthChips(); save();
-    }));
-}
-
-/* ---------- priorities ---------- */
-const PRIO_LABELS = ["Priority one","Priority two","Priority three"];
-function buildPrios(){
-  $("#prios").innerHTML = state.prios.map((p,i)=>`
-    <div class="prio">
-      <h3>${PRIO_LABELS[i]}</h3>
-      <input data-i="${i}" data-f="t" placeholder="What to work on" value="${esc(p.t)}">
-      <textarea data-i="${i}" data-f="d" placeholder="Why it matters and the concrete fix…">${esc(p.d)}</textarea>
-    </div>`).join("");
-  document.querySelectorAll("#prios input, #prios textarea").forEach(el=>
-    el.addEventListener("input", ()=>{ state.prios[+el.dataset.i][el.dataset.f]=el.value; save(); }));
-}
-function refreshPrioChips(){
-  const taken = new Set(state.prios.map(p=>p.t.trim()));
+function refreshOppChips(){
+  const taken = state.summary.oppT.trim();
   const chips = [];
   STEPS.forEach(s=>{
     const st = state.steps[s.key];
     if(st.score!==null && st.score>=1 && st.score<=3){
-      st.checked.forEach((c,i)=>{ if(!c && !taken.has(s.behaviors[i])) chips.push({step:s.name, text:s.behaviors[i]}); });
+      st.checked.forEach((c,i)=>{ if(!c && s.behaviors[i]!==taken) chips.push({step:s.name, text:s.behaviors[i]}); });
     }
   });
-  $("#prioChips").innerHTML = chips.map(c=>
+  $("#oppChips").innerHTML = chips.map(c=>
     `<button type="button" class="chip" data-text="${esc(c.text)}"><span class="tag">${c.step}</span>${esc(c.text)}</button>`).join("");
-  $("#prioEmpty").style.display = chips.length ? "none" : "";
-  document.querySelectorAll("#prioChips .chip").forEach(ch=>
+  $("#oppEmpty").style.display = chips.length ? "none" : "";
+  document.querySelectorAll("#oppChips .chip").forEach(ch=>
     ch.addEventListener("click", ()=>{
-      const slot = state.prios.findIndex(p=>!p.t.trim());
-      if(slot!==-1){ state.prios[slot].t = ch.dataset.text; buildPrios(); refreshPrioChips(); save(); }
+      state.summary.oppT = ch.dataset.text;
+      $("#oppTitle").value = ch.dataset.text;
+      refreshOppChips(); save();
+      $("#oppDetail").focus();
     }));
 }
 
@@ -532,13 +509,16 @@ function restoreUI(){
     if(st.note){ noteWrap.hidden=false; el.querySelector(".noteToggle").style.display="none"; }
   });
   $("#managerNote").value = state.note || "";
-  refreshOverall(); refreshStrengthChips(); refreshPrioChips();
+  $("#summaryText").value = state.summary.text || "";
+  $("#oppTitle").value = state.summary.oppT || "";
+  $("#oppDetail").value = state.summary.oppD || "";
+  refreshOverall(); refreshOppChips();
 }
 
 document.addEventListener("DOMContentLoaded", ()=>{
   fillDatalist("#roster", ROSTER);
   fillDatalist("#evaluators", EVALUATORS);
-  buildSteps(); buildStrengths(); buildPrios();
+  buildSteps(); wireSummary();
   loadSaved();
   restoreUI();
   $("#managerNote").addEventListener("input", e=>{ state.note=e.target.value; save(); });
