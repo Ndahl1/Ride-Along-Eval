@@ -142,8 +142,6 @@
   .opp input{margin-bottom:8px;font-weight:600}
   .opp textarea{min-height:60px}
 
-  /* ---------- Manager note ---------- */
-  #managerNote{min-height:120px}
   .dictate{font-size:12.5px;color:var(--muted);margin-top:8px}
 
   /* ---------- Buttons ---------- */
@@ -182,7 +180,7 @@
     ul.behaviors li.print-hide{display:none}
     ul.behaviors label{padding:3px 0;cursor:default}
     ul.behaviors input{width:14px;height:14px}
-    .stepnote textarea,.opp textarea,.opp input,#summaryText,#managerNote,.field input,.field select{
+    .stepnote textarea,.opp textarea,.opp input,#summaryText,.field input,.field select{
       border:none;padding:2px 0;min-height:0;background:#fff;
     }
     .stepnote.print-hide,.field.print-dim{display:block}
@@ -275,6 +273,7 @@
       <div class="lbl" id="sumScoreLbl">Process score · no steps scored yet</div>
     </div>
     <textarea id="summaryText" placeholder="The whole appointment in one honest paragraph — how the process flowed, what the customer experienced, and where it turned…"></textarea>
+    <p class="dictate">Tip: on your phone, tap the microphone on the keyboard and dictate this in the truck while it’s fresh.</p>
     <div class="opp">
       <h3>Biggest opportunity</h3>
       <p class="hint">Suggestions come from unchecked behaviors on steps scored 3 or below. Tap one to fill it, or type your own.</p>
@@ -285,13 +284,6 @@
     </div>
   </div></section>
 
-  <!-- Manager's note -->
-  <section class="card"><div class="card-pad">
-    <h2 class="sect">Manager’s note</h2>
-    <p class="hint">The personal word that makes this recap land. One honest paragraph beats three generic ones.</p>
-    <textarea id="managerNote" placeholder="What I want you to take away from today’s ride-along…"></textarea>
-    <p class="dictate">Tip: on your phone, tap the microphone on the keyboard and dictate this in the truck while it’s fresh.</p>
-  </div></section>
 
 </main>
 
@@ -362,7 +354,6 @@ const state = {
   header:{consultant:"",date:"",job:"",evaluator:EVALUATORS[0]||"",outcome:"",quote:""},
   steps:{},        // key -> {score:null|0..5 (0 = N/A), checked:[bool], note:""}
   summary:{text:"", oppT:"", oppD:""},
-  note:"",
 };
 STEPS.forEach(s => state.steps[s.key] = {score:null, checked:s.behaviors.map(()=>false), note:""});
 
@@ -508,7 +499,6 @@ function restoreUI(){
     noteWrap.classList.toggle("print-hide", !ta.value.trim());
     if(st.note){ noteWrap.hidden=false; el.querySelector(".noteToggle").style.display="none"; }
   });
-  $("#managerNote").value = state.note || "";
   $("#summaryText").value = state.summary.text || "";
   $("#oppTitle").value = state.summary.oppT || "";
   $("#oppDetail").value = state.summary.oppD || "";
@@ -521,7 +511,6 @@ document.addEventListener("DOMContentLoaded", ()=>{
   buildSteps(); wireSummary();
   loadSaved();
   restoreUI();
-  $("#managerNote").addEventListener("input", e=>{ state.note=e.target.value; save(); });
   $("#newBtn").addEventListener("click", ()=>{
     if(!confirm("Start a new recap? This clears the current one.")) return;
     try{ localStorage.removeItem(KEY); }catch(e){}
